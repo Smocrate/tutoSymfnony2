@@ -2,7 +2,6 @@ ma liste master:
 #il manque le commentraire avec la description#
 
 a
-b
-c
+caca
 d
 e
