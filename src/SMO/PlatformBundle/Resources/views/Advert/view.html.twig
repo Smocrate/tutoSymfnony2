@@ -1,0 +1,74 @@
+{# src/SMO/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+{% extends "SMOPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Lecture d'une annonce - {{ parent() }}
+{% endblock %}
+
+{% block smoplatform_body %}
+
+  <h2>{{ advert.title }}</h2>
+  <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+  
+  <div class="well">
+    {% if advert.image is not null %}
+      <p>
+        <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" style="max-width:300px; max-height:200px;" />
+      </p>
+    {% endif %}
+    <p>
+      {{ advert.content }}
+    </p>
+    {% if not advert.categories.empty %}
+      <p>
+        Cette annonce est parue dans les catégories suivantes :<br>
+        {% for category in advert.categories %}
+          {{ category.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    {% else %}
+        Pas de catégories.
+      </p>
+    {% endif %}
+    
+    {% if listAdvertSkills|length > 0 %}
+        <div>
+            Cette annonce requiert les compétences suivantes:
+            <ul>
+            {% for advertSkill in listAdvertSkills %}
+                <li>{{ advertSkill.skill.name }} : niveau {{ advertSkill.level }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+  </div>
+  
+  <h2>Candidatures</h2>
+  <div class="well">
+    {% if listApplications|length > 0 %}
+      {% for application in listApplications %}
+        <i>Par {{ application.author }}, le {{  application.date|date('d/m/Y') }}</i>
+        <p>{{ application.content }}</p>
+        <hr>
+      {% endfor %}
+    {% else %}
+      <p>Il n'y a aucune quandidature pour cette annonce.</p>
+    {% endif %}
+  </div>
+  
+  <p>
+    <a href="{{ path('smo_platform_home') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la liste
+    </a>
+    <a href="{{ path('smo_platform_edit', {'id': advert.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-edit"></i>
+      Modifier l'annonce
+    </a>
+    <a href="{{ path('smo_platform_delete', {'id': advert.id}) }}" class="btn btn-danger">
+      <i class="glyphicon glyphicon-trash"></i>
+      Supprimer l'annonce
+    </a>
+  </p>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{# src/SMO/PlatformBundle/Resources/views/Advert/edit.html.twig #}
+
+{% extends "SMOPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Ajouter une annonce - {{ parent() }}
+{% endblock %}
+
+{% block smoplatform_body %}
+
+  <h2>Ajouter une annonce</h2>
+
+  {{ include("SMOPlatformBundle:Advert:form.html.twig") }}
+
+  <p>
+    Vous allez ajouter une annonce.
+  </p>
+
+  <p>
+    <a href="{{ path('smo_platform_home') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à l'acceuil
+    </a>
+  </p>
+
+{% endblock %}

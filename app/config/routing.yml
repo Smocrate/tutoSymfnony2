@@ -1,0 +1,4 @@
+smo_platform:
+    resource: "@SMOPlatformBundle/Resources/config/routing.yml"
+    prefix:   /platform
+

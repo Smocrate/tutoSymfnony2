@@ -1,0 +1,11 @@
+parameters:
+    mon_parametre: ma_valeur
+
+services:
+
+#    smo_platform.example:
+#        class: SMO\PlatformBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    smo_platform.antispam:
+        class: SMO\PlatformBundle\Antispam\SMOAntispam
+        arguments: [@mailer, %locale%, 50]
