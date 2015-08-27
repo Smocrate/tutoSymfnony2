@@ -48,7 +48,8 @@ class AdvertController extends Controller
     
     $advert = $em
         ->getRepository('SMOPlatformBundle:Advert')
-        ->myFindId($id)
+        ->myFind($id)
+//        ->getAdvertWithApplications($id)
     ;
     
     if( null === $advert )
@@ -57,10 +58,10 @@ class AdvertController extends Controller
     }
     
     // On récupère la liste des candidatures
-    $listApplications = $em
-        ->getRepository('SMOPlatformBundle:Application')
-        ->findBy(array('advert'=>$advert))
-    ;
+//    $listApplications = $em
+//        ->getRepository('SMOPlatformBundle:Application')
+//        ->findBy(array('advert'=>$advert))
+//    ;
     
     //On récupère la liste des skill
     $listSkills = $em
@@ -72,7 +73,7 @@ class AdvertController extends Controller
     
     return $this->render('SMOPlatformBundle:Advert:view.html.twig', array(
       'advert' => $advert,
-      'listApplications' => $listApplications,
+//      'listApplications' => $listApplications,
       'listAdvertSkills' => $listSkills
     ));
   }

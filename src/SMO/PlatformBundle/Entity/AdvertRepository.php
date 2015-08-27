@@ -3,6 +3,7 @@
 namespace SMO\PlatformBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * AdvertRepository
@@ -21,7 +22,7 @@ class AdvertRepository extends EntityRepository
         ;
     }
     
-    public function myFindId($id)
+    public function myFind($id)
     {
         $qd = $this->createQueryBuilder('a');
         
@@ -32,7 +33,7 @@ class AdvertRepository extends EntityRepository
         
         return $qd
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
     
@@ -50,7 +51,50 @@ class AdvertRepository extends EntityRepository
         
         return $qd
             ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    
+    public function getAdvertWithApplications($id)
+    {
+        $qd = $this
+            ->createQueryBuilder('a')
+            ->leftJoin('a.applications', 'app')
+            ->addSelect('app')
+            ->where('a.id = :id')
+              ->setParameter('id', $id)
+        ;
+        
+        return $qd
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    
+    public function getAdvertWithCategeries(array $categoryName)
+    {
+        $qd = $this
+            ->createQueryBuilder('a')
+            ->leftJoin('a.categories', 'cat', 'WITH', 'cat.name IN :categoryName')
+              ->setParameter('categoryName', $categoryName)
+            ->addSelect('cat')
+        ;
+        
+        return $qd
+            ->getQuery()
             ->getResult()
         ;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

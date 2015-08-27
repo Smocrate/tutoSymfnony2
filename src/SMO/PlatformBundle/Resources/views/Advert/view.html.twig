@@ -31,6 +31,7 @@
       </p>
     {% endif %}
     
+    {# % if listAdvertSkills|length > 0 % #}
     {% if listAdvertSkills|length > 0 %}
         <div>
             Cette annonce requiert les compétences suivantes:
@@ -45,8 +46,10 @@
   
   <h2>Candidatures</h2>
   <div class="well">
-    {% if listApplications|length > 0 %}
-      {% for application in listApplications %}
+    {# % if listApplications|length > 0 % #}
+    {% if advert.applications|length > 0 %}
+      {# % for application in listApplications % #}
+      {% for application in advert.applications %}
         <i>Par {{ application.author }}, le {{  application.date|date('d/m/Y') }}</i>
         <p>{{ application.content }}</p>
         <hr>
