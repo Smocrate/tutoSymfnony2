@@ -148,7 +148,8 @@ class AdvertController extends Controller
       $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
       return $this->redirect($this->generateUrl('smo_platform_view', array('id' => $advert->getId())));
     }
-
+    
+    return new Response('Slug généré : '.$advert->getSlug());
     return $this->render('SMOPlatformBundle:Advert:add.html.twig');
   }
 
