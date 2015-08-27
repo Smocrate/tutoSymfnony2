@@ -86,7 +86,23 @@ class AdvertRepository extends EntityRepository
         ;
     }
     
-    
+    public function getAdvertWithApplicationsAndSkills($id)
+    {
+        $qd = $this
+            ->createQueryBuilder('a')
+            ->leftJoin('a.applications', 'app')
+            ->leftJoin('a.categories', 'cat')
+            ->addSelect('app')
+            ->addSelect('cat')
+            ->where('a.id = :id')
+              ->setParameter('id', $id)
+        ;
+        
+        return $qd
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
     
     
     
