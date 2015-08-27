@@ -9,7 +9,7 @@
 {% block smoplatform_body %}
 
   <h2>{{ advert.title }}</h2>
-  <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+  <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }} {% if advert.updateAt is not null %}, modifier le {{ advert.updateAt|date('d/m/Y') }} {% endif %}</i>
   
   <div class="well">
     {% if advert.image is not null %}

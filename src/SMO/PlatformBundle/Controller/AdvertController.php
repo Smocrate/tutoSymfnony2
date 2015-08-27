@@ -48,8 +48,8 @@ class AdvertController extends Controller
     
     $advert = $em
         ->getRepository('SMOPlatformBundle:Advert')
-        ->myFind($id)
-//        ->getAdvertWithApplications($id)
+//        ->myFind($id)
+        ->getAdvertWithApplications($id)
     ;
     
     if( null === $advert )
@@ -130,6 +130,17 @@ class AdvertController extends Controller
     }
     
     
+    // Ajout des catégories
+    $listCategories = $em
+        ->getRepository('SMOPlatformBundle:Category')
+        ->findAll()
+    ;
+    foreach($listCategories as $category)
+    {
+        $advert->addCategory($category);
+    }
+
+    
     // Enregistrement de cette nouvelle annonce
     $em->flush();
     
@@ -137,7 +148,8 @@ class AdvertController extends Controller
       $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
       return $this->redirect($this->generateUrl('smo_platform_view', array('id' => $advert->getId())));
     }
-
+    
+    return new Response('Slug généré : '.$advert->getSlug());
     return $this->render('SMOPlatformBundle:Advert:add.html.twig');
   }
 
@@ -156,23 +168,13 @@ class AdvertController extends Controller
         throw new NotFoundHttpException("L'annonce id = '$id' n'existe pas.");
     }
     
-    // FindAll() pour renvoyer toutes les catégories de la base de données
-    $listCategories = $em
-        ->getRepository('SMOPlatformBundle:Category')
-        ->findAll()
-    ;
-    
-    foreach($listCategories as $category)
-    {
-        $advert->addCategory($category);
-    }
-    
+    $advert->setTitle($advert->getTitle().".");
     $em->flush();
     
     if ($request->isMethod('POST')) {
       $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
 
-      return $this->redirect($this->generateUrl('smo_platform_view', array('id' => 5)));
+      return $this->redirect($this->generateUrl('smo_platform_view', array('id' => $id)));
     }
     
     
