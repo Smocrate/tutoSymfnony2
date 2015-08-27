@@ -1,14 +1,14 @@
 <?php
-// src/SMO/PlatformBundle/Entity/Skill.php
+// src/SMO/PlatformBundle/Entity/Category.php
 
 namespace SMO\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="SMO\PlatformBundle\Entity\SkillRepository")
+ * @ORM\Entity
  */
-class Skill
+class Category
 {
   /**
    * @ORM\Column(name="id", type="integer")
@@ -21,6 +21,6 @@ class Skill
    * @ORM\Column(name="name", type="string", length=255)
    */
   private $name;
-  
+
   // Getters et setters
 }
