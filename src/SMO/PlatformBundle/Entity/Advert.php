@@ -54,6 +54,11 @@ class Advert
    * @ORM\ManyToMany(targetEntity="SMO\PlatformBundle\Entity\Category", cascade={"persist"})
    */
   private $categories;
+  
+  /**
+   * @ORM\ManyToMany(targetEntity="SMO\PlatformBundle\Entity\AdvertSkill", cascade={"persist"})
+   */
+  private $advertSkills;
 
   /**
    * @ORM\OneToMany(targetEntity="SMO\PlatformBundle\Entity\Application", mappedBy="advert")
@@ -81,6 +86,7 @@ class Advert
     $this->date         = new \Datetime();
     $this->categories   = new ArrayCollection();
     $this->applications = new ArrayCollection();
+    $this->advertSkills = new ArrayCollection();
   }
 
   /**
@@ -321,5 +327,37 @@ class Advert
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Add advertSkills
+     *
+     * @param \SMO\PlatformBundle\Entity\AdvertSkill $advertSkills
+     * @return Advert
+     */
+    public function addAdvertSkill(\SMO\PlatformBundle\Entity\AdvertSkill $advertSkills)
+    {
+        $this->advertSkills[] = $advertSkills;
+        return $this;
+    }
+
+    /**
+     * Remove advertSkills
+     *
+     * @param \SMO\PlatformBundle\Entity\AdvertSkill $advertSkills
+     */
+    public function removeAdvertSkill(\SMO\PlatformBundle\Entity\AdvertSkill $advertSkills)
+    {
+        $this->advertSkills->removeElement($advertSkills);
+    }
+
+    /**
+     * Get advertSkills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAdvertSkills()
+    {
+        return $this->advertSkills;
     }
 }

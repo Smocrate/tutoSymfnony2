@@ -23,6 +23,9 @@ class AdvertRepository extends EntityRepository
             // Jointure sur l'attribut categories
             ->leftJoin('a.categories', 'c')
             ->addSelect('c')
+            // Jointure sur l'attribut advertSkills
+            ->leftJoin('a.advertSkills', 'ads')
+            ->addSelect('ads')
             ->orderBy('a.date', 'DESC')
             ->getQuery()
             ->getResult()
