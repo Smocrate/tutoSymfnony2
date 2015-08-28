@@ -9,7 +9,13 @@
 {% block smoplatform_body %}
 
   <h2>{{ advert.title }}</h2>
-  <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }} {% if advert.updateAt is not null %}, modifier le {{ advert.updateAt|date('d/m/Y') }} {% endif %}</i>
+  <i>
+    Par {{ advert.author }}, 
+    le {{ advert.date|date('d/m/Y') }} 
+    {% if advert.updateAt is not null %}
+        , modifier le {{ advert.updateAt|date('d/m/Y') }}
+    {% endif %}
+  </i>
   
   <div class="well">
     {% if advert.image is not null %}
@@ -31,7 +37,6 @@
       </p>
     {% endif %}
     
-    {# % if listAdvertSkills|length > 0 % #}
     {% if listAdvertSkills|length > 0 %}
         <div>
             Cette annonce requiert les compétences suivantes:
@@ -43,22 +48,7 @@
         </div>
     {% endif %}
   </div>
-  
-  <h2>Candidatures</h2>
-  <div class="well">
-    {# % if listApplications|length > 0 % #}
-    {% if advert.applications|length > 0 %}
-      {# % for application in listApplications % #}
-      {% for application in advert.applications %}
-        <i>Par {{ application.author }}, le {{  application.date|date('d/m/Y') }}</i>
-        <p>{{ application.content }}</p>
-        <hr>
-      {% endfor %}
-    {% else %}
-      <p>Il n'y a aucune quandidature pour cette annonce.</p>
-    {% endif %}
-  </div>
-  
+    
   <p>
     <a href="{{ path('smo_platform_home') }}" class="btn btn-default">
       <i class="glyphicon glyphicon-chevron-left"></i>
