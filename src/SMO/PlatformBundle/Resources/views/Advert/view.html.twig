@@ -12,8 +12,8 @@
   <i>
     Par {{ advert.author }}, 
     le {{ advert.date|date('d/m/Y') }} 
-    {% if advert.updateAt is not null %}
-        , modifier le {{ advert.updateAt|date('d/m/Y') }}
+    {% if advert.updatedAt is not null %}
+        , modifier le {{ advert.updatedAt|date('d/m/Y') }}
     {% endif %}
   </i>
   

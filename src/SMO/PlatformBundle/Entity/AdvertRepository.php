@@ -43,5 +43,13 @@ class AdvertRepository extends EntityRepository
         return new Paginator($query, true);
     }
     
+    public function getPublishedQueryBuilder()
+    {
+        return $this
+            ->createQueryBuilder('a')
+            ->where('a.published = :published')
+            ->setParameter('published', true)
+        ;
+    }
     
 }

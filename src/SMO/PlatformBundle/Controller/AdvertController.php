@@ -5,9 +5,11 @@ namespace SMO\PlatformBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use SMO\PlatformBundle\Entity\Advert;
+use SMO\PlatformBundle\Form\AdvertType;
+use SMO\PlatformBundle\Form\AdvertEditType;
 #use Symfony\Component\HttpFoundation\Response;
 #use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-#use SMO\PlatformBundle\Entity\Advert;
 #use SMO\PlatformBundle\Entity\Image;
 #use SMO\PlatformBundle\Entity\Application;
 #use SMO\PlatformBundle\Entity\AdvertSkill;
@@ -23,10 +25,10 @@ class AdvertController extends Controller
   {
     if ($page < 1)
     {
-      throw $this->createNotFoundHttpException("La page ".$page." n'existe pas.");
+      throw $this->createNotFoundHttpException("La page '$page' n'existe pas.");
     }
     
-    $nbPerPage = 2;
+    $nbPerPage = 3;
     
     // Récupération de la liste de toutes les annonces
     $listAdverts = $this
@@ -74,7 +76,7 @@ class AdvertController extends Controller
     // Recuperation de l'annonce grace à son id
     $advert = $em
         ->getRepository('SMOPlatformBundle:Advert')
-        ->myFind($id)
+        ->find($id)
     ;
     
     if(null === $advert)
@@ -101,81 +103,27 @@ class AdvertController extends Controller
   */
   public function addAction(Request $request)
   {
-    // Si on arrive avec un envoi de formulaire
-    if($request->isMethod('POST'))
+    $advert = new Advert();
+    $form = $this->get('form.factory')->create(new AdvertType(), $advert);
+    
+    // Vérifier la validité des données entré
+    if($form->handleRequest($request)->isValid())
     {
-        $request
-            ->getSession()
-            ->getFlashBag()
-            ->add('info', 'Annonce bien enregistrée.')
-        ;
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($advert);
+        $em->flush();
+        
+        $request->getSession()->getFlashBag()->add('info', 'Annonce bien enregistrée.');
         
         return $this->redirect($this->generateUrl('smo_platform_view', array(
-            'id' => 1
+            'id' => $advert->getId(),
         )));
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    // $em = $this->getDoctrine()->getManager();
-    
-    // // Création d'une nouvelle annonce
-    // $advert = new Advert();
-    // $advert->setTitle('Recherche deux lutin');
-    // $advert->setAuthor('Guillaume E.');
-    // $advert->setContent('Nous cherchons PERSONNE et NUL PART !');
-    
-    
-    
-    // // Création d'une nouvelle image
-    // $image = new Image();
-    // $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
-    // $image->setAlt('Job de rêve');
-    // $advert->setImage($image);
-    
-    // // Création des skill
-    // $listSkills = $em
-        // ->getRepository('SMOPlatformBundle:Skill')
-        // ->findAll()
-    // ;
-    // // Pour chaque compétences
-    // foreach($listSkills as $skill)
-    // {
-        // $advertSkill = new AdvertSkill();
-        // $advertSkill->setAdvert($advert);
-        // $advertSkill->setSkill($skill);
-        // $advertSkill->setLevel('Expert');
-        // $em->persist($advertSkill);
-        // $advert->addAdvertSkill($advertSkill);
-        // $em->persist($advert);
-    // }
-    
-    
-    // // Ajout des catégories
-    // $listCategories = $em
-        // ->getRepository('SMOPlatformBundle:Category')
-        // ->findAll()
-    // ;
-    // foreach($listCategories as $category)
-    // {
-        // $advert->addCategory($category);
-    // }
-    
-    
-    
-    // $em->flush();
-    
-    
-    
-    
-    // Si on arrive pas avec POST on affiche le formulaire
-    return $this->render('SMOPlatformBundle:Advert:edit.html.twig');    
+    // Affichage du formulaire si pas d'envon, ou formulaire invalide
+    return $this->render('SMOPlatformBundle:Advert:add.html.twig', array(
+        'form' => $form->createView(),
+    ));    
   }
   
   /**
@@ -185,10 +133,7 @@ class AdvertController extends Controller
    */
   public function editAction($id, Request $request)
   {
-    // Récupération du manager
     $em = $this->getDoctrine()->getManager();
-    
-    // Récupération de l'entité de l'annonce
     $advert = $em
         ->getRepository('SMOPlatformBundle:Advert')
         ->find($id)
@@ -199,8 +144,16 @@ class AdvertController extends Controller
         throw $this->createNotFoundHttpException("L'annonce id = '$id' n'existe pas.");
     }    
     
+    $form = $this->get('form.factory')->create(new AdvertEditType(), $advert);
+    
+#    if($form->handleRequest($request)->isValid())
+#    {
+#        // Le formulaire vient d'être envoyé et il est valide
+#    }
+    
     return $this->render('SMOPlatformBundle:Advert:edit.html.twig', array(
-        'advert' => $advert
+        'advert'    => $advert,
+        'form'      => $form->createView(),
     ));
   }
   
