@@ -17,25 +17,44 @@ class AdvertController extends Controller
   /**
    * Affichage de la page principal des annonces 
    * @param integer $page
+   * @param integer $nbPerPage
    */
-  public function indexAction($page)
+  public function indexAction($page = 1)
   {
     if ($page < 1)
     {
       throw $this->createNotFoundHttpException("La page ".$page." n'existe pas.");
     }
     
+    $nbPerPage = 2;
+    
     // Récupération de la liste de toutes les annonces
     $listAdverts = $this
         ->getDoctrine()
         ->getManager()
         ->getRepository('SMOPlatformBundle:Advert')
-        ->getAdverts()
+        ->getAdverts($page, $nbPerPage)
     ;
+    
+    $nbAdverts = count($listAdverts);
+    $nbPages   = ceil($nbAdverts / $nbPerPage);
+    
+    // Retourne une erreur si page demandé est > $nbPagesTotal
+    if($page > $nbPages)
+    {
+        if($nbAdverts == 0)
+        {
+            return $this->createNotFoundHttpException("Aucune annonce n'a été enregistrée");
+        }
+        return $this->createNotFoundHttpException("La page '$page' n'existe pas.");
+    }
     
     // On affiche les résultats
     return $this->render('SMOPlatformBundle:Advert:index.html.twig', array(
-        'listAdverts' => $listAdverts
+        'listAdverts' => $listAdverts,
+        'nbAdverts' => $nbAdverts,
+        'page' => $page,
+        'nbPages' => $nbPages
     ));
   }
   
@@ -95,6 +114,65 @@ class AdvertController extends Controller
             'id' => 1
         )));
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // $em = $this->getDoctrine()->getManager();
+    
+    // // Création d'une nouvelle annonce
+    // $advert = new Advert();
+    // $advert->setTitle('Recherche deux lutin');
+    // $advert->setAuthor('Guillaume E.');
+    // $advert->setContent('Nous cherchons PERSONNE et NUL PART !');
+    
+    
+    
+    // // Création d'une nouvelle image
+    // $image = new Image();
+    // $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+    // $image->setAlt('Job de rêve');
+    // $advert->setImage($image);
+    
+    // // Création des skill
+    // $listSkills = $em
+        // ->getRepository('SMOPlatformBundle:Skill')
+        // ->findAll()
+    // ;
+    // // Pour chaque compétences
+    // foreach($listSkills as $skill)
+    // {
+        // $advertSkill = new AdvertSkill();
+        // $advertSkill->setAdvert($advert);
+        // $advertSkill->setSkill($skill);
+        // $advertSkill->setLevel('Expert');
+        // $em->persist($advertSkill);
+        // $advert->addAdvertSkill($advertSkill);
+        // $em->persist($advert);
+    // }
+    
+    
+    // // Ajout des catégories
+    // $listCategories = $em
+        // ->getRepository('SMOPlatformBundle:Category')
+        // ->findAll()
+    // ;
+    // foreach($listCategories as $category)
+    // {
+        // $advert->addCategory($category);
+    // }
+    
+    
+    
+    // $em->flush();
+    
+    
+    
     
     // Si on arrive pas avec POST on affiche le formulaire
     return $this->render('SMOPlatformBundle:Advert:edit.html.twig');    
@@ -186,4 +264,15 @@ class AdvertController extends Controller
         )
     );
   }
-}
+  
+  /**
+   * createNotFoundHttpException
+   * @param string $message
+   */
+  private function createNotFoundHttpException($message)
+  {
+    return $this->render('SMOPlatformBundle::error404.html.twig', array(
+        'message' => $message
+    ));
+  }
+}   

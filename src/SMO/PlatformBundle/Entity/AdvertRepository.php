@@ -4,6 +4,7 @@
 namespace SMO\PlatformBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * AdvertRepository
@@ -13,9 +14,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdvertRepository extends EntityRepository
 {
-    public function getAdverts()
+    public function getAdverts($page = 1, $nbPerPage)
     {
-        return $this
+        $query = $this
             ->createQueryBuilder('a')
             // Jointure sur l'attribut image
             ->leftJoin('a.image', 'i')
@@ -28,8 +29,18 @@ class AdvertRepository extends EntityRepository
             ->addSelect('ads')
             ->orderBy('a.date', 'DESC')
             ->getQuery()
-            ->getResult()
         ;
+        
+        $query
+            // A partir de quelle annonce on commence la liste
+            ->setFirstResult(($page - 1) * $nbPerPage)
+            // Nombre maxium de résultat à afficher
+            ->setMaxResults($nbPerPage)
+        ;
+        
+        // On utilise la fonction de pagination de Doctrine
+        // Retourne les annonces ET le nombre d'annonce totale sans le MAX
+        return new Paginator($query, true);
     }
     
     
