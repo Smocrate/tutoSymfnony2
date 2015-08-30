@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use SMO\PlatformBundle\Entity\Advert;
 use SMO\PlatformBundle\Form\AdvertType;
 use SMO\PlatformBundle\Form\AdvertEditType;
-#use Symfony\Component\HttpFoundation\Response;
+#
+use Symfony\Component\HttpFoundation\Response;
 #use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 #use SMO\PlatformBundle\Entity\Image;
 #use SMO\PlatformBundle\Entity\Application;
@@ -146,10 +147,17 @@ class AdvertController extends Controller
     
     $form = $this->get('form.factory')->create(new AdvertEditType(), $advert);
     
-#    if($form->handleRequest($request)->isValid())
-#    {
-#        // Le formulaire vient d'être envoyé et il est valide
-#    }
+    if($form->handleRequest($request)->isValid())
+    {
+        // Le formulaire vient d'être envoyé et il est valide
+        $em->flush();
+        
+        $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
+        
+        return $this->redirect($this->generateUrl('smo_platform_view', array(
+            'id' => $id,
+        )));
+    }
     
     return $this->render('SMOPlatformBundle:Advert:edit.html.twig', array(
         'advert'    => $advert,
@@ -161,7 +169,7 @@ class AdvertController extends Controller
    * Suppression d'une annonce
    * @param integer $id
    */
-  public function deleteAction($id)
+  public function deleteAction($id, Request $request)
   {
     // Récupération du manager
     $em = $this->getDoctrine()->getManager();
@@ -177,21 +185,22 @@ class AdvertController extends Controller
         throw $this->createNotFoundHttpException("Annonce id = '$id' n'existe pas.");
     }
     
-    // Si on entre par la méthod post on supprime l'annonce
-    if($request->isMethod('POST'))
+    $form = $this->createFormBuilder()->getForm();
+    
+    if($form->handleRequest($request)->isValid())
     {
-        $request
-            ->getSession()
-            ->getFlashBag()
-            ->add('info', 'Annonce bien supprimée.')
-        ;
+        $em->remove($advert);
+        $em->flush();
+        
+        $request->getSession()->getFlashBag()->add('info', 'Annonce bien suppriumée.');
         
         return $this->redirect($this->generateUrl('smo_platform_home'));
     }
     
     // Si la requete est en get on affiche une page de confirmation avant delete
     return $this->render('SMOPlatformBundle:Advert:delete.html.twig', array(
-        'advert' => $advert
+        'advert'    => $advert,
+        'form'      => $form->createView(),
     ));
   }
   
@@ -227,5 +236,13 @@ class AdvertController extends Controller
     return $this->render('SMOPlatformBundle::error404.html.twig', array(
         'message' => $message
     ));
+  }
+  
+  /**
+   * Afficher la page de test avec la jquery
+   */
+  public function jqueryAction()
+  {
+      return $this->render('SMOPlatformBundle:Advert:jquery.html.twig');
   }
 }   

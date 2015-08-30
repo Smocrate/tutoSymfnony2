@@ -20,7 +20,8 @@
   <div class="well">
     {% if advert.image is not null %}
       <p>
-        <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" style="max-width:300px; max-height:200px;" />
+        <img src="{{ asset(advert.image.webPath) }}" 
+            alt="{{ advert.image.alt }}" style="max-width:300px; max-height:200px;" />
       </p>
     {% endif %}
     <p>

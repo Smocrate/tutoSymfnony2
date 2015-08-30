@@ -25,3 +25,7 @@ smo_platform_delete:
     defaults:   { _controller: SMOPlatformBundle:Advert:delete }
     requirements:
         id:     \d+
+
+smo_platform_jquery:
+    path:       /jquery
+    defaults:   { _controller: SMOPlatformBundle:Advert:jquery }
