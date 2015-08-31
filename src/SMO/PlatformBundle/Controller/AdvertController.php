@@ -4,10 +4,13 @@
 namespace SMO\PlatformBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use SMO\PlatformBundle\Entity\Advert;
 use SMO\PlatformBundle\Form\AdvertType;
 use SMO\PlatformBundle\Form\AdvertEditType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 #
 use Symfony\Component\HttpFoundation\Response;
 #use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -101,6 +104,7 @@ class AdvertController extends Controller
   /**
   * Ajout d'une annonce
   * @param request $request
+  * @Security("has_role('ROLE_USER')")
   */
   public function addAction(Request $request)
   {

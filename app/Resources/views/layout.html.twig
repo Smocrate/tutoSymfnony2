@@ -22,6 +22,15 @@
         Ce projet est propulsé par Symfony2,
         et construit grâce au MOOC OpenClassrooms et SensioLabs.
       </p>
+      <p><i>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        Connecté en tant que {{ app.user.username }}
+        -
+        <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+        {% else %}
+        <a href="{{ path('fos_user_security_login') }}">Connexion</a>
+        {% endif %}
+      </i></p>
     </div>
 
     <div class="row">
