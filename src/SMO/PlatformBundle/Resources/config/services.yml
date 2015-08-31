@@ -2,7 +2,15 @@ parameters:
     mon_parametre: ma_valeur
 
 services:
-
+    smo_platform.beta.html:
+        class: SMO\PlatformBundle\Beta\BetaHTML
+        
+    smo_platform.beta.listener:
+        class: SMO\PlatformBundle\Beta\BetaListener
+        arguments: [@smo_platform.beta.html, "2015-09-05"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: processBeta }
+    
     smo_platform.doctrine.notification:
         class: SMO\PlatformBundle\DoctrineListener\ApplicationNotification
         arguments: [@mailer]
@@ -12,18 +20,18 @@ services:
     smo_platform.antispam:
         class: SMO\PlatformBundle\Antispam\SMOAntispam
         arguments: [@mailer, 50]
-        calls:
-            - [ setLocale, [%locale% ] ]
+#        calls:
+#            - [ setLocale, [%locale% ] ]
 #        tags:
 #            - { name: twig.extension }
      
     smo_platform.validator.antiflood:
         class: SMO\PlatformBundle\Validator\AntifloodValidator
         arguments: [@request_stack, @doctrine.orm.entity_manager]
-        tags:
-            - { name: validator.constraint_validator, alias: smo_platform_antiflood }
+#        tags:
+#            - { name: validator.constraint_validator, alias: smo_platform_antiflood }
             
     smo_blog.ckeditor:
         class: SMO\PlatformBundle\Form\Type\CkeditorType
-        tags:
-            - { name: form.type, alias: ckeditor }
+#        tags:
+#            - { name: form.type, alias: ckeditor }

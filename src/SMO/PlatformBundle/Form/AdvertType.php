@@ -21,8 +21,8 @@ class AdvertType extends AbstractType
             ->add('date',       'datetime')
             ->add('title',      'text')
             ->add('author',     'text')
-#            ->add('content',    'textarea')
-            ->add('content',    'ckeditor')
+            ->add('content',    'textarea')
+#            ->add('content',    'ckeditor')
             ->add('image',      new ImageType(), array('required' => false))
             ->add('categories', 'entity',   array(
                 'class'     => 'SMOPlatformBundle:Category',
