@@ -6,10 +6,15 @@ namespace SMO\PlatformBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use SMO\PlatformBundle\Validator\Antiflood;
+
 
 /**
  * @ORM\Entity(repositoryClass="SMO\PlatformBundle\Entity\AdvertRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="title", message="Une annonce existe déjà avec ce titre.")
  */
 class Advert
 {
@@ -22,21 +27,25 @@ class Advert
 
   /**
    * @ORM\Column(name="date", type="datetime")
+   * @Assert\DateTime()
    */
   private $date;
 
   /**
    * @ORM\Column(name="title", type="string", length=255, unique=true)
+   * @Assert\Length(min=10)
    */
   private $title;
 
   /**
    * @ORM\Column(name="author", type="string", length=255)
+   * @Assert\Length(min=2)
    */
   private $author;
 
   /**
    * @ORM\Column(name="content", type="text")
+   * @Assert\NotBlank()
    */
   private $content;
 
@@ -47,6 +56,7 @@ class Advert
 
   /**
    * @ORM\OneToOne(targetEntity="SMO\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
+   * @Assert\Valid()
    */
   private $image;
 

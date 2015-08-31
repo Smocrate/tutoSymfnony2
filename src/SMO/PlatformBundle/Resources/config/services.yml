@@ -12,3 +12,9 @@ services:
     smo_platform.antispam:
         class: SMO\PlatformBundle\Antispam\SMOAntispam
         arguments: [@mailer, %locale%, 50]
+     
+    smo_platform.validator.antiflood:
+        class: SMO\PlatformBundle\Validator\AntifloodValidator
+        arguments: [@request_stack, @doctrine.orm.entity_manager]
+        tags:
+            - { name: validator.constraint_validator, alias: smo_platform_antiflood }
