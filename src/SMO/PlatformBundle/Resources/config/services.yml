@@ -11,12 +11,19 @@ services:
     
     smo_platform.antispam:
         class: SMO\PlatformBundle\Antispam\SMOAntispam
-        arguments: [@mailer, %locale%, 50]
-        tags:
-            - { name: twig.extension }
+        arguments: [@mailer, 50]
+        calls:
+            - [ setLocale, [%locale% ] ]
+#        tags:
+#            - { name: twig.extension }
      
     smo_platform.validator.antiflood:
         class: SMO\PlatformBundle\Validator\AntifloodValidator
         arguments: [@request_stack, @doctrine.orm.entity_manager]
         tags:
             - { name: validator.constraint_validator, alias: smo_platform_antiflood }
+            
+    smo_blog.ckeditor:
+        class: SMO\PlatformBundle\Form\Type\CkeditorType
+        tags:
+            - { name: form.type, alias: ckeditor }

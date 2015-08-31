@@ -88,6 +88,6 @@ stof_doctrine_extensions:
             sluggable: true
 
 fos_user:
-    db_driver:       orm
+    db_driver:      orm
     firewall_name:  main
     user_class:     SMO\UserBundle\Entity\User
