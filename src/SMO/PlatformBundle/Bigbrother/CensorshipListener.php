@@ -4,7 +4,9 @@
 namespace SMO\PlatformBundle\Bigbrother;
 
 
-class CensorshipListener
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class CensorshipListener implements EventSubscriberInterface
 {
     protected $processor;
     protected $listUsers = array();
@@ -13,6 +15,14 @@ class CensorshipListener
     {
         $this->processor = $processor;
         $this->listUsers = $listUsers;
+    }
+
+    static public function getSubscribedEvents()
+    {
+        return array(
+            'smo_platform.bigbrother.post_message'  => array('processMessage' => 2),
+            'autre.evenement'                       => 'autreMethode',
+        );
     }
 
     public function processMessage(MessagePostEvent $event)
@@ -27,5 +37,10 @@ class CensorshipListener
         }
 
 
+    }
+
+    public function autreMethode()
+    {
+        return;
     }
 }

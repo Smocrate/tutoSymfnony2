@@ -9,7 +9,7 @@ services:
         class: SMO\PlatformBundle\Beta\BetaListener
         arguments: [@smo_platform.beta.html, "2015-09-05"]
         tags:
-            - { name: kernel.event_listener, event: kernel.response, method: processBeta }
+            - { name: kernel.event_listener, event: kernel.response, method: processBeta, priority: 2 }
 
     smo_platform.censorship_processor:
         class: SMO\PlatformBundle\Bigbrother\CensorshipProcessor
@@ -19,7 +19,7 @@ services:
         class: SMO\PlatformBundle\Bigbrother\CensorshipListener
         arguments: [@smo_platform.censorship_processor, [1,2,3]]
         tags:
-            - { name: kernel.event_listener, event: smo_platform.bigbrother.post_message, method: processMessage }
+            - { name: kernel.event_subsciber }
 
     
     smo_platform.doctrine.notification:
