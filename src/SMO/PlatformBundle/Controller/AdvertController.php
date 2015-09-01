@@ -3,6 +3,8 @@
 
 namespace SMO\PlatformBundle\Controller;
 
+use SMO\PlatformBundle\Bigbrother\BigbrotherEvents;
+use SMO\PlatformBundle\Bigbrother\MessagePostEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -109,11 +111,22 @@ class AdvertController extends Controller
   public function addAction(Request $request)
   {
     $advert = new Advert();
+    $advert->setUser($this->getUser());
+    $advert->setAuthor($this->getUser()->getUsername());
     $form = $this->get('form.factory')->create(new AdvertType(), $advert);
     
     // Vérifier la validité des données entré
     if($form->handleRequest($request)->isValid())
     {
+        $event = new MessagePostEvent($advert->getContent(), $advert->getUser());
+
+        $this
+            ->get('event_dispatcher')
+            ->dispatch(BigbrotherEvents::onMessagePost, $event)
+        ;
+
+        $advert->setContent($event->getMessage());
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($advert);
         $em->flush();

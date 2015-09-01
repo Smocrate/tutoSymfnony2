@@ -17,4 +17,14 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="SMO\PlatformBundle\Entity\Advert", mappedBy="user")
+     */
+    private $adverts;
+
+    public function __construct()
+    {
+        $this->adverts = new ArrayCollection();
+    }
 }

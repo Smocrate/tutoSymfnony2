@@ -91,12 +91,18 @@ class Advert
    */
   private $slug;
 
+  /**
+   * @ORM\ManyToOne(targetEntity="SMO\UserBundle\Entity\User", cascade={"persist"})
+   */
+  private $user;
+
   public function __construct()
   {
     $this->date         = new \Datetime();
     $this->categories   = new ArrayCollection();
     $this->applications = new ArrayCollection();
     $this->advertSkills = new ArrayCollection();
+    $this->user         = new \SMO\UserBundle\Entity\User();
   }
 
   /**
@@ -369,5 +375,28 @@ class Advert
     public function getAdvertSkills()
     {
         return $this->advertSkills;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \SMO\UserBundle\Entity\User $user
+     * @return Advert
+     */
+    public function setUser(\SMO\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SMO\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
