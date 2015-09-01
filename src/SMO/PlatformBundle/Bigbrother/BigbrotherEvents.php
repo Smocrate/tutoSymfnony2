@@ -5,5 +5,5 @@ namespace SMO\PlatformBundle\Bigbrother;
 
 final class BigbrotherEvents
 {
-    const onMessagePost = 'smo_platform.bigbrither.post_message';
+    const onMessagePost = 'smo_platform.bigbrother.post_message';
 }

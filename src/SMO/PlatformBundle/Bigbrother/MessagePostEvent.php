@@ -3,7 +3,6 @@
 
 namespace SMO\PlatformBundle\Bigbrother;
 
-
 use SMO\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 

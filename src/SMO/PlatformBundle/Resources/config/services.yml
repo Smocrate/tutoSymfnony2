@@ -10,6 +10,17 @@ services:
         arguments: [@smo_platform.beta.html, "2015-09-05"]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: processBeta }
+
+    smo_platform.censorship_processor:
+        class: SMO\PlatformBundle\Bigbrother\CensorshipProcessor
+        arguments: [@mailer]
+
+    smo_platform.censorship_listener:
+        class: SMO\PlatformBundle\Bigbrother\CensorshipListener
+        arguments: [@smo_platform.censorship_processor, [1,2,3]]
+        tags:
+            - { name: kernel.event_listener, event: smo_platform.bigbrother.post_message, method: processMessage }
+
     
     smo_platform.doctrine.notification:
         class: SMO\PlatformBundle\DoctrineListener\ApplicationNotification
