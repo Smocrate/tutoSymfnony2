@@ -46,3 +46,8 @@ services:
         class: SMO\PlatformBundle\Form\Type\CkeditorType
 #        tags:
 #            - { name: form.type, alias: ckeditor }
+
+    smo_platform.json_paramconverter:
+        class: SMO\PlatformBundle\ParamConverter\JsonParamConverter
+        tags:
+            - { name: request.param_converter }

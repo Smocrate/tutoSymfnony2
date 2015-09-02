@@ -6,19 +6,13 @@ namespace SMO\PlatformBundle\Controller;
 use SMO\PlatformBundle\Bigbrother\BigbrotherEvents;
 use SMO\PlatformBundle\Bigbrother\MessagePostEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use SMO\PlatformBundle\Entity\Advert;
 use SMO\PlatformBundle\Form\AdvertType;
 use SMO\PlatformBundle\Form\AdvertEditType;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-#
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
-#use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-#use SMO\PlatformBundle\Entity\Image;
-#use SMO\PlatformBundle\Entity\Application;
-#use SMO\PlatformBundle\Entity\AdvertSkill;
+
 
 class AdvertController extends Controller
 {
@@ -69,26 +63,17 @@ class AdvertController extends Controller
 
     /**
      * Affichage d'une annonce grace à son id
+     * @param Advert $advert
      * @param integer $id
+     * @paramConverter("advert", oprions={"mapping": {"advert_id": "id"]})
      */
-    public function viewAction($id)
+    public function viewAction(Advert $advert)
     {
         // Recuperation du manager
         $em = $this
             ->getDoctrine()
             ->getManager()
         ;
-
-        // Recuperation de l'annonce grace à son id
-        $advert = $em
-            ->getRepository('SMOPlatformBundle:Advert')
-            ->find($id)
-        ;
-
-        if(null === $advert)
-        {
-            throw $this->createNotFoundHttpException("L'annonce d'id '$id' n'existe pas");
-        }
 
         // Récupération de la liste des skills
         $listSkills = $em
@@ -268,5 +253,15 @@ class AdvertController extends Controller
         return $this->render('SMOPlatformBundle:Advert:translation.html.twig', array(
             'name' => $name,
         ));
+    }
+
+    /**
+     * @param $json
+     * @ParamConverter("json")
+     * @return Response
+     */
+    public function  ParamConverterAction($json)
+    {
+        return new Response(print_r($json,true));
     }
 }   
