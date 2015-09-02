@@ -8,7 +8,7 @@ smo_platform_view:
     path:       /advert/{advert_id}
     defaults:   { _controller: SMOPlatformBundle:Advert:view }
     requirements:
-        id:     \d+
+        advert_id:     \d+
 
 smo_platform_add:
     path:       /add

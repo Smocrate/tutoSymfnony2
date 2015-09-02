@@ -21,14 +21,12 @@ class AdvertController extends Controller
      * @param integer $page
      * @param integer $nbPerPage
      */
-    public function indexAction($page = 1)
+    public function indexAction($page = 1, $nbPerPage = 3)
     {
         if ($page < 1)
         {
             throw $this->createNotFoundHttpException("La page '$page' n'existe pas.");
         }
-
-        $nbPerPage = 3;
 
         // Récupération de la liste de toutes les annonces
         $listAdverts = $this
@@ -64,8 +62,7 @@ class AdvertController extends Controller
     /**
      * Affichage d'une annonce grace à son id
      * @param Advert $advert
-     * @param integer $id
-     * @paramConverter("advert", oprions={"mapping": {"advert_id": "id"]})
+     * @paramConverter("advert", options={"mapping": {"advert_id": "id"}})
      */
     public function viewAction(Advert $advert)
     {
